@@ -1,0 +1,139 @@
+import { useSelector } from "react-redux";
+import Cart from "../../../Cart";
+import Compair from "../../../Helpers/icons/Compair";
+import ThinBag from "../../../Helpers/icons/ThinBag";
+import ThinLove from "../../../Helpers/icons/ThinLove";
+import ThinPeople from "../../../Helpers/icons/ThinPeople";
+import SearchBox from "../../../Helpers/SearchBox";
+import { Link } from "react-router-dom";
+import i18n from "i18next";
+import logo from "../../../../../public/assets/images/logo.png";
+import { useState } from "react";
+import Selectbox from "../../../Helpers/Selectbox";
+import Arrow from "../../../Helpers/icons/Arrow";
+import { useTheme } from "@material-ui/core";
+import Cookies from "universal-cookie";
+import { useEffect } from "react";
+import LanguageSwitchIcon from "../../../Helpers/icons/Language";
+import "../../../../index.css";
+import language from "../../../../../public/assets/images/language.svg";
+import { useCartDrawer } from "../../../../context/CartDrawerContext";
+import { useTranslation } from "react-i18next";
+import userIcon from "../../../../../public/assets/images/user.png";
+
+export default function Middlebar({ className, type }) {
+  const cart = useSelector((state) => state.cart.value);
+  const favorite = useSelector((state) => state.favorit.items);
+  const theme = useTheme();
+  const [toggleLang, setToggleLang] = useState(false);
+  const lang = localStorage.getItem("i18nextLng");
+  const logStatus = JSON.parse(localStorage.getItem("yolo_log_status"));
+  console.log(logStatus === "true");
+
+  document.body.dir = i18n.dir();
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    document.body.dir = i18n.dir();
+    theme.direction = i18n.dir();
+    const language = localStorage.setItem("language", lng);
+    setToggleLang(false);
+  };
+  const { openCartDrawer, closeCartDrawer, toggleCartDrawer } = useCartDrawer();
+
+  const { t } = useTranslation();
+  return (
+    <div
+      className={`w-full h-[10vh] ${className} flex justify-center top-0 fixed z-40 bg-[#13171a]`}
+    >
+      <div className=" h-full w-[100%] ">
+        <div className=" mx-6 relative h-full ">
+          <div className="flex justify-between items-center h-full">
+            <div className="mx-3">
+              <Link to="/">
+                <img width="100" src={logo} alt="logo" />
+              </Link>
+            </div>
+            <div className="flex items-center justify-center gap-2 text-white">
+              <div className="relative pl-5">
+                <div
+                  onClick={() => setToggleLang(!toggleLang)}
+                  className="cursor-pointer"
+                >
+                  <span className="flex items-center space-x-1 text-white hover:text-secondary-color transition-colors duration-300">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418"
+                      />
+                    </svg>
+                  </span>
+                </div>
+                <div
+                  className={`${
+                    toggleLang ? "block" : "hidden"
+                  } absolute left-0 mt-2 w-36 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-10 transition-all duration-300`}
+                >
+                  <ul className="py-1">
+                    <li
+                      className={`${
+                        lang === "ar"
+                          ? "bg-gray-50 text-gray-600"
+                          : "text-gray-700"
+                      } block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-600 transition-colors duration-200 cursor-pointer`}
+                      onClick={() => changeLanguage("ar")}
+                    >
+                      العربية
+                    </li>
+                    <li
+                      className={`${
+                        lang === "en"
+                          ? "bg-gray-50 text-gray-600"
+                          : "text-gray-700"
+                      } block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-600 transition-colors duration-200 cursor-pointer`}
+                      onClick={() => changeLanguage("en")}
+                    >
+                      English
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div className="cart-wrapper group relative py-4 mt-2">
+                <div className="cart relative cursor-pointer  hover:text-secondary-color">
+                  <button onClick={() => openCartDrawer()}>
+                    <span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+                        />
+                      </svg>
+                    </span>
+                  </button>
+                  <span className="w-[18px] h-[18px] rounded-full bg-secondary-color absolute -top-2 -right-2.5 flex justify-center items-center text-[10px] taxt-main-color">
+                    {cart?.length}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

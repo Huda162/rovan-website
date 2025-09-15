@@ -1,0 +1,16 @@
+/* Swiper dots styling */
+.swiper-pagination-bullet {
+    width: 5px;
+    height: 5px;
+    background: #ccc;
+    opacity: 1;
+    margin: 0 5px !important;
+  }
+  
+  .swiper-pagination-bullet-active {
+    background: #333;
+  }
+  
+  .swiper {
+    padding-bottom: 30px; /* Make space for dots */
+  }
